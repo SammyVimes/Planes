@@ -12,12 +12,16 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.vbo.VertexBufferObject;
+import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import android.content.Context;
 
 public class Textures {
 
 	private BitmapTextureAtlas bitmapTextureAtlas;
+	
+	private VertexBufferObjectManager vertexBufferObjectManager;
 	
 	private Map<String, Texture> texturesMap;
 	private List<Texture> textures;
@@ -27,9 +31,26 @@ public class Textures {
 	
 	private boolean isLoaded = false;
 	
-	public Textures() {
+	private static Textures instance;
+	
+	public static Textures getTextures() {
+		if (instance == null) {
+			instance = new Textures();
+		}
+		return instance;
+	}
+	
+	private Textures() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		textures = new ArrayList<Texture>();
+	}
+	
+	public void setVertexBufferObject(final VertexBufferObjectManager vertexBufferObjectManager) {
+		this.vertexBufferObjectManager = vertexBufferObjectManager;
+	}
+
+	public VertexBufferObjectManager getVertexBufferObjectManager() {
+		return vertexBufferObjectManager;
 	}
 	
 	public void addTexture(final Texture texture) {
