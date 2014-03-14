@@ -11,6 +11,9 @@ public class AI {
 	private List<AIController> aiControllers;
 
 	public void onUpdate(final float secondsElapsed) {
+		if (aiControllers == null) {
+			return;
+		}
 		for (AIController controller : aiControllers) {
 			
 		}

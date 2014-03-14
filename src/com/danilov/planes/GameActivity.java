@@ -11,6 +11,7 @@ import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.color.Color;
 
 import com.danilov.planes.game.Game;
+import com.danilov.planes.graphics.StaticTexture;
 import com.danilov.planes.graphics.Textures;
 
 public class GameActivity extends BaseGameActivity {
@@ -33,6 +34,9 @@ public class GameActivity extends BaseGameActivity {
 	public void onCreateResources(
 			OnCreateResourcesCallback pOnCreateResourcesCallback)
 			throws Exception {
+		Textures textures = Textures.getTextures();
+		textures.addTexture(StaticTexture.PLANE_NORMAL.getTexture());
+		textures.load(getTextureManager(), this, 512, 512);
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
 

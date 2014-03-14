@@ -12,8 +12,9 @@ public class Texture implements Comparable<Texture> {
 	protected boolean isRegionLoaded = false;
 	
 	
-	public Texture(final String name, final int width, final int height) {
+	public Texture(final String name, final String path, final int width, final int height) {
 		this.name = name;
+		this.path = path;
 		this.width = width;
 		this.height = height;
 	}

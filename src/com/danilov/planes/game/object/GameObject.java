@@ -6,7 +6,7 @@ import com.danilov.planes.game.GameWorld;
 
 public class GameObject implements IUpdateHandler {
 
-	private GameWorld gameWorld;
+	protected GameWorld gameWorld;
 	
 	public GameObject(final GameWorld gameWorld) {
 		this.gameWorld = gameWorld;

@@ -43,6 +43,7 @@ public class Textures {
 	private Textures() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		textures = new ArrayList<Texture>();
+		texturesMap = new HashMap<String, Texture>();
 	}
 	
 	public void setVertexBufferObject(final VertexBufferObjectManager vertexBufferObjectManager) {
@@ -57,10 +58,11 @@ public class Textures {
 		textures.add(texture);
 	}
 	
-	public void load(final TextureManager textureManager, final Context context) {
+	public void load(final TextureManager textureManager, final Context context, final int atlasHeight, final int atlasWidth) {
+		this.atlasHeight = atlasHeight;
+		this.atlasWidth = atlasWidth;
 		this.bitmapTextureAtlas = new BitmapTextureAtlas(textureManager, atlasWidth, atlasHeight, TextureOptions.BILINEAR);		
 		Collections.sort(textures);
-		texturesMap = new HashMap<String, Texture>();
 		int curX = 0;
 		int curY = 0;
 		int maxHeight = 0;
@@ -78,7 +80,15 @@ public class Textures {
 			texture.isRegionLoaded = true;
 			texturesMap.put(texture.name, texture);
 		}
+		bitmapTextureAtlas.load();
 		isLoaded = true;
+	}
+	
+	public void unload() {
+		texturesMap.clear();
+		textures.clear();
+		bitmapTextureAtlas.unload();
+		bitmapTextureAtlas = null;
 	}
 	
 	public ITextureRegion getTextureRegion(final String name) {

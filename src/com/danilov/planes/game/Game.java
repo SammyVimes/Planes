@@ -25,6 +25,7 @@ public class Game implements IUpdateHandler {
 	
 	public void init(final GameOptions gameOptions) {
 		gameWorld.init(gameOptions, scene);
+		ai = new AI();
 		engine.registerUpdateHandler(this);
 	}
 

@@ -30,8 +30,12 @@ public class GameWorld {
 	//TODO: remove after test
 	private void test() {
 		Player player = new Player(this, 25, 25);
-		player.attachToScene(scene);
+		player.init();
 		gameObjects.add(player);
+	}
+	
+	public Scene getScene() {
+		return scene;
 	}
 	
 	public void onUpdate(final float secondsElapsed) {
