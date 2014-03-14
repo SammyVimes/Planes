@@ -12,7 +12,9 @@ public class Game implements IUpdateHandler {
 	protected Camera camera;
 	private Engine engine;
 	private Scene scene;
+	
 	private GameWorld gameWorld;
+	private AI ai;
 	
 	public Game(final Engine engine, final Camera camera, final Scene scene) {
 		this.engine = engine;
@@ -28,6 +30,7 @@ public class Game implements IUpdateHandler {
 
 	@Override
 	public void onUpdate(final float secondsElapsed) {
+		ai.onUpdate(secondsElapsed);
 		gameWorld.onUpdate(secondsElapsed);
 	}
 

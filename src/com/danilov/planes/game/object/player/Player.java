@@ -1,4 +1,4 @@
-package com.danilov.planes.game.object;
+package com.danilov.planes.game.object.player;
 
 import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.entity.Entity;
@@ -7,10 +7,12 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.util.color.Color;
 
 import com.danilov.planes.game.GameWorld;
+import com.danilov.planes.game.object.GameObject;
 import com.danilov.planes.graphics.Textures;
 
 public class Player extends GameObject {
 	
+	private PlaneState planeState;
 	private Entity plane;
 	private PhysicsHandler physicsHandler;
 	private int x;

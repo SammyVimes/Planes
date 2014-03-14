@@ -6,7 +6,7 @@ import java.util.List;
 import org.andengine.entity.scene.Scene;
 
 import com.danilov.planes.game.object.GameObject;
-import com.danilov.planes.game.object.Player;
+import com.danilov.planes.game.object.player.Player;
 import com.danilov.planes.game.options.GameOptions;
 
 public class GameWorld {
