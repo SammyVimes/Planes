@@ -24,7 +24,7 @@ public class Player extends GameObject {
 	private boolean isAttached = false;
 	private float x;
 	private float y;
-	private double velocity = 25;
+	private double velocity = 75;
 	private double velocityY = 0;
 	private double velocityX = 0;
 	
@@ -52,8 +52,11 @@ public class Player extends GameObject {
 		velocityX = Math.cos(angleRad) * velocity;
 		velocityY = Math.sin(angleRad) * velocity;
 		((Sprite) plane).setRotation((float) angle);
+		setVelocity(velocityX, velocityY);
+	}
+	
+	public void setVelocity(final double xVel, final double yVel) {
 		physicsHandler.setVelocity((float) velocityX, (float) velocityY);
-		
 	}
 	
 	public void attachToScene() {
