@@ -36,6 +36,8 @@ public class GameActivity extends BaseGameActivity {
 			throws Exception {
 		Textures textures = Textures.getTextures();
 		textures.addTexture(StaticTexture.PLANE_NORMAL.getTexture());
+		textures.addTexture(StaticTexture.JOYSTICK_BASE.getTexture());
+		textures.addTexture(StaticTexture.JOYSTICK_KNOB.getTexture());
 		textures.load(getTextureManager(), this, 512, 512);
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}

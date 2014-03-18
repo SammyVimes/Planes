@@ -2,31 +2,41 @@ package com.danilov.planes.game.object.player;
 
 import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.entity.Entity;
-import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.util.color.Color;
 
 import com.danilov.planes.game.GameWorld;
+import com.danilov.planes.game.controller.Controller;
+import com.danilov.planes.game.controller.DevicePlayerController;
 import com.danilov.planes.game.object.GameObject;
-import com.danilov.planes.game.object.RotateState;
+import com.danilov.planes.game.object.Side;
 import com.danilov.planes.graphics.StaticTexture;
 import com.danilov.planes.graphics.Textures;
 
 public class Player extends GameObject {
+
 	
-	private PlaneState planeState;
-	private RotateState rotateState = RotateState.RIGHT;
-	private double rotationAngle = 0; //degrees
+	private static final double DEF_ROT_ANGLE = 2;
+	
 	private Entity plane;
 	private Scene scene;
-	private PhysicsHandler physicsHandler;
 	private boolean isAttached = false;
+	private PhysicsHandler physicsHandler;
+	
+	private PlaneState planeState;
+	private Side looksToThe = Side.RIGHT;
 	private float x;
 	private float y;
+	private double rotationAngle = 0; //degrees
 	private double velocity = 75;
 	private double velocityY = 0;
 	private double velocityX = 0;
+	
+	private boolean isRotating = false;
+	private Side rotatingToThe = null;
+	
+	
+	private Controller controller;
 	
 	public Player(final GameWorld gameWorld, final float x, final float y) {
 		super(gameWorld);
@@ -36,14 +46,23 @@ public class Player extends GameObject {
 		//TODO: remove after test
 	}
 	
+	public void setController(final DevicePlayerController controller) {
+		this.controller = controller;
+	}
+	
 	public void init() {
 		physicsHandler = new PhysicsHandler(null); //do not forget to set entity or will cause NOP
 		changeState(PlaneState.NORMAL);
 		setRotationAngle(0);
 	}
 	
-	public void setRotateState(final RotateState rotateState) {
-		this.rotateState = rotateState;
+	public void setLooksToThe(final Side looksToThe) {
+		this.looksToThe = looksToThe;
+		if (this.looksToThe == Side.LEFT) {
+			setflippedHorizontal(true);
+		} else {
+			setflippedHorizontal(false);
+		}
 	}
 	
 	public void setRotationAngle(final double angle) {
@@ -53,6 +72,10 @@ public class Player extends GameObject {
 		velocityY = Math.sin(angleRad) * velocity;
 		((Sprite) plane).setRotation((float) angle);
 		setVelocity(velocityX, velocityY);
+	}
+	
+	public void addRotationAngle(final double angle) {
+		setRotationAngle(rotationAngle + angle); 
 	}
 	
 	public void setVelocity(final double xVel, final double yVel) {
@@ -70,7 +93,36 @@ public class Player extends GameObject {
 		//update coordinates TODO: decide if this is needed
 		this.x = plane.getX();
 		this.y = plane.getY();
-		setRotationAngle(rotationAngle + 10);
+		performRotations();
+	}
+	
+	@SuppressWarnings("incomplete-switch")
+	private void performRotations() {
+		if (isRotating) {
+			switch (rotatingToThe) {
+			case LEFT:
+				addRotationAngle(-DEF_ROT_ANGLE);
+				break;
+			case RIGHT:
+				addRotationAngle(DEF_ROT_ANGLE);
+				break;
+			}
+		}
+	}
+	
+	public void startRotatingLeft() {
+		isRotating = true;
+		rotatingToThe = Side.LEFT;
+	}
+	
+	public void startRotatingRight() {
+		isRotating = true;
+		rotatingToThe = Side.RIGHT;
+	}
+	
+	public void stopRotating() {
+		isRotating = false;
+		rotatingToThe = null;
 	}
 	
 	public void changeState(final PlaneState state) {
@@ -94,13 +146,20 @@ public class Player extends GameObject {
 			plane = new Sprite(x, y, textures.getTextureRegion(StaticTexture.PLANE_NORMAL.getName()), textures.getVertexBufferObjectManager());
 			break;
 		}
-		if (this.rotateState == RotateState.LEFT) {
-			((Sprite) plane).setFlippedHorizontal(true);
-		} else {
-			((Sprite) plane).setFlippedHorizontal(false);
-		}
+		setLooksToThe(this.looksToThe);
 		physicsHandler.setEntity(plane);
 		attachToScene();
+	}
+	
+	private void setflippedHorizontal(final boolean isFlipped) {
+		if (plane == null) {
+			return;
+		}
+		((Sprite) plane).setFlippedHorizontal(isFlipped);
+	}
+
+	public Controller getController() {
+		return controller;
 	}
 	
 }

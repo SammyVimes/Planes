@@ -24,14 +24,10 @@ public class GameWorld {
 	
 	public void init(final GameOptions gameOptions, final Scene scene) {
 		this.scene = scene;
-		test();
 	}
 	
-	//TODO: remove after test
-	private void test() {
-		Player player = new Player(this, 25, 25);
-		player.init();
-		gameObjects.add(player);
+	public void addObject(final GameObject gameObject) {
+		this.gameObjects.add(gameObject);
 	}
 	
 	public Scene getScene() {
