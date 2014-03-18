@@ -17,14 +17,16 @@ public class Player extends GameObject {
 	
 	private PlaneState planeState;
 	private RotateState rotateState = RotateState.RIGHT;
+	private double rotationAngle = 0; //degrees
 	private Entity plane;
 	private Scene scene;
 	private PhysicsHandler physicsHandler;
 	private boolean isAttached = false;
 	private float x;
 	private float y;
-	private int velocityY = 0;
-	private int velocityX = 5;
+	private double velocity = 25;
+	private double velocityY = 0;
+	private double velocityX = 0;
 	
 	public Player(final GameWorld gameWorld, final float x, final float y) {
 		super(gameWorld);
@@ -32,17 +34,26 @@ public class Player extends GameObject {
 		this.x = x;
 		this.y = y;
 		//TODO: remove after test
-		velocityX = 25;
 	}
 	
 	public void init() {
 		physicsHandler = new PhysicsHandler(null); //do not forget to set entity or will cause NOP
-		physicsHandler.setVelocity(velocityX, velocityY);
 		changeState(PlaneState.NORMAL);
+		setRotationAngle(0);
 	}
 	
 	public void setRotateState(final RotateState rotateState) {
 		this.rotateState = rotateState;
+	}
+	
+	public void setRotationAngle(final double angle) {
+		this.rotationAngle = angle;
+		double angleRad =  Math.PI  * angle / 180;
+		velocityX = Math.cos(angleRad) * velocity;
+		velocityY = Math.sin(angleRad) * velocity;
+		((Sprite) plane).setRotation((float) angle);
+		physicsHandler.setVelocity((float) velocityX, (float) velocityY);
+		
 	}
 	
 	public void attachToScene() {
@@ -56,6 +67,7 @@ public class Player extends GameObject {
 		//update coordinates TODO: decide if this is needed
 		this.x = plane.getX();
 		this.y = plane.getY();
+		setRotationAngle(rotationAngle + 10);
 	}
 	
 	public void changeState(final PlaneState state) {
@@ -64,7 +76,7 @@ public class Player extends GameObject {
 		}
 		Textures textures = Textures.getTextures();
 		this.planeState = state;
-		if (isAttached) { //TODO: is logic clear? or maybe just check for null 
+		if (isAttached && plane != null) { //TODO: is logic clear? or maybe just check for null 
 			plane.detachSelf();
 		}
 		isAttached = false;
