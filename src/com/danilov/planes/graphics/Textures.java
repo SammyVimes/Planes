@@ -41,7 +41,6 @@ public class Textures {
 	}
 	
 	private Textures() {
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		textures = new ArrayList<Texture>();
 		texturesMap = new HashMap<String, Texture>();
 	}
@@ -70,6 +69,10 @@ public class Textures {
 			if (curX + texture.width > atlasWidth) {
 				curX = 0;
 				curY += maxHeight;
+				maxHeight = 0;
+			}
+			if (curY + texture.height > atlasHeight) {
+				throw new RuntimeException("Atlas is not big enough"); //TODO: change to textures exception etc
 			}
 			if (texture.height > maxHeight) {
 				maxHeight = texture.height;
@@ -87,7 +90,9 @@ public class Textures {
 	public void unload() {
 		texturesMap.clear();
 		textures.clear();
-		bitmapTextureAtlas.unload();
+		if (bitmapTextureAtlas != null) {
+			bitmapTextureAtlas.unload();
+		}
 		bitmapTextureAtlas = null;
 	}
 	

@@ -16,7 +16,7 @@ import com.danilov.planes.graphics.Textures;
 public class Player extends GameObject {
 
 	
-	private static final double DEF_ROT_ANGLE = 2;
+	private static final double DEF_ROT_ANGLE = 120;
 	
 	private Entity plane;
 	private Scene scene;
@@ -28,7 +28,7 @@ public class Player extends GameObject {
 	private float x;
 	private float y;
 	private double rotationAngle = 0; //degrees
-	private double velocity = 75;
+	private double velocity = 95;
 	private double velocityY = 0;
 	private double velocityX = 0;
 	
@@ -66,7 +66,12 @@ public class Player extends GameObject {
 	}
 	
 	public void setRotationAngle(final double angle) {
-		this.rotationAngle = angle;
+		//making angle not bigger than 360 and not smaller than -360
+		if (angle > 0) {
+			rotationAngle = angle % 360;
+		} else {
+			rotationAngle = ((angle * (-1)) % 360) * (-1);
+		}
 		double angleRad =  Math.PI  * angle / 180;
 		velocityX = Math.cos(angleRad) * velocity;
 		velocityY = Math.sin(angleRad) * velocity;
@@ -78,7 +83,15 @@ public class Player extends GameObject {
 		setRotationAngle(rotationAngle + angle); 
 	}
 	
-	public void setVelocity(final double xVel, final double yVel) {
+	public void setVelocity(final double velocity) {
+		this.velocity = velocity;
+		double angleRad =  Math.PI  * rotationAngle / 180;
+		velocityX = Math.cos(angleRad) * velocity;
+		velocityY = Math.sin(angleRad) * velocity;
+		setVelocity(velocityX, velocityY);
+	}
+	
+	private void setVelocity(final double xVel, final double yVel) {
 		physicsHandler.setVelocity((float) velocityX, (float) velocityY);
 	}
 	
@@ -89,22 +102,22 @@ public class Player extends GameObject {
 	}
 	
 	@Override
-	public void onUpdate(float secondsElapsed) {
+	public void onUpdate(final float secondsElapsed) {
 		//update coordinates TODO: decide if this is needed
 		this.x = plane.getX();
 		this.y = plane.getY();
-		performRotations();
+		performRotations(secondsElapsed);
 	}
 	
 	@SuppressWarnings("incomplete-switch")
-	private void performRotations() {
+	private void performRotations(final float secondsElapsed) {
 		if (isRotating) {
 			switch (rotatingToThe) {
 			case LEFT:
-				addRotationAngle(-DEF_ROT_ANGLE);
+				addRotationAngle(-DEF_ROT_ANGLE * secondsElapsed);
 				break;
 			case RIGHT:
-				addRotationAngle(DEF_ROT_ANGLE);
+				addRotationAngle(DEF_ROT_ANGLE * secondsElapsed);
 				break;
 			}
 		}

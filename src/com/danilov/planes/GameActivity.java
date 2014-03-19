@@ -7,6 +7,7 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.color.Color;
 
@@ -34,6 +35,7 @@ public class GameActivity extends BaseGameActivity {
 	public void onCreateResources(
 			OnCreateResourcesCallback pOnCreateResourcesCallback)
 			throws Exception {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		Textures textures = Textures.getTextures();
 		textures.addTexture(StaticTexture.PLANE_NORMAL.getTexture());
 		textures.addTexture(StaticTexture.JOYSTICK_BASE.getTexture());
@@ -61,6 +63,12 @@ public class GameActivity extends BaseGameActivity {
 	public void onPopulateScene(Scene pScene,
 			OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception {
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
+	}
+	
+	@Override
+	public void onDestroyResources() throws Exception {
+		Textures.getTextures().unload();
+		super.onDestroyResources();
 	}
 
 }
