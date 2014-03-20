@@ -43,7 +43,6 @@ public class Player extends GameObject {
 		scene = gameWorld.getScene(); 
 		this.x = x;
 		this.y = y;
-		//TODO: remove after test
 	}
 	
 	public void setController(final DevicePlayerController controller) {
@@ -72,11 +71,8 @@ public class Player extends GameObject {
 		} else {
 			rotationAngle = ((angle * (-1)) % 360) * (-1);
 		}
-		double angleRad =  Math.PI  * angle / 180;
-		velocityX = Math.cos(angleRad) * velocity;
-		velocityY = Math.sin(angleRad) * velocity;
+		setVelocity(velocity);
 		((Sprite) plane).setRotation((float) angle);
-		setVelocity(velocityX, velocityY);
 	}
 	
 	public void addRotationAngle(final double angle) {
@@ -88,6 +84,10 @@ public class Player extends GameObject {
 		double angleRad =  Math.PI  * rotationAngle / 180;
 		velocityX = Math.cos(angleRad) * velocity;
 		velocityY = Math.sin(angleRad) * velocity;
+		if (looksToThe == Side.LEFT) {
+			velocityX = -velocityX;
+			velocityY = -velocityY;
+		}
 		setVelocity(velocityX, velocityY);
 	}
 	
