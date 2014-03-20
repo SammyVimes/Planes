@@ -45,6 +45,7 @@ public class Game implements IUpdateHandler {
 		DevicePlayerController controller = new DevicePlayerController(p);
 		p.setController(controller);
 		p.init();
+		p.setLooksToThe(Side.LEFT);
 		gameWorld.addObject(p);
 		ai = new AI();
 		engine.registerUpdateHandler(this);

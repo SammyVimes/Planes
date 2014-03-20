@@ -62,6 +62,7 @@ public class Player extends GameObject {
 		} else {
 			setflippedHorizontal(false);
 		}
+		setVelocity(velocity);
 	}
 	
 	public void setRotationAngle(final double angle) {
