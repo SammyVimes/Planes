@@ -4,7 +4,6 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
-import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
@@ -50,9 +49,7 @@ public class GameActivity extends BaseGameActivity {
 		Textures textures = Textures.getTextures();
 		textures.setVertexBufferObject(this.getVertexBufferObjectManager());
 		scene = new Scene();
-
 		scene.setBackground(new Background(Color.BLUE));
-		
 		game = new Game(this.mEngine, camera, scene);
 		game.init(null);
 		mEngine.setScene(scene);

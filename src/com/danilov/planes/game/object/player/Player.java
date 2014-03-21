@@ -7,7 +7,6 @@ import org.andengine.entity.sprite.Sprite;
 
 import com.danilov.planes.game.GameWorld;
 import com.danilov.planes.game.controller.Controller;
-import com.danilov.planes.game.controller.DevicePlayerController;
 import com.danilov.planes.game.object.GameObject;
 import com.danilov.planes.game.object.Side;
 import com.danilov.planes.graphics.StaticTexture;

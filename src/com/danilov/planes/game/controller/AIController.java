@@ -37,5 +37,5 @@ public class AIController implements Controller {
 			aiPlayer.stopRotating();
 		}
 	}
-
+	
 }
