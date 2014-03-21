@@ -57,7 +57,7 @@ public class Textures {
 		textures.add(texture);
 	}
 	
-	public void load(final TextureManager textureManager, final Context context, final int atlasHeight, final int atlasWidth) {
+	public void load(final TextureManager textureManager, final Context context, final int atlasWidth, final int atlasHeight) {
 		this.atlasHeight = atlasHeight;
 		this.atlasWidth = atlasWidth;
 		this.bitmapTextureAtlas = new BitmapTextureAtlas(textureManager, atlasWidth, atlasHeight, TextureOptions.BILINEAR);		
@@ -72,7 +72,8 @@ public class Textures {
 				maxHeight = 0;
 			}
 			if (curY + texture.height > atlasHeight) {
-				throw new RuntimeException("Atlas is not big enough"); //TODO: change to textures exception etc
+				//TODO: change to textures exception etc
+				throw new RuntimeException("Atlas is not big enough"); 
 			}
 			if (texture.height > maxHeight) {
 				maxHeight = texture.height;

@@ -2,20 +2,36 @@ package com.danilov.planes.game;
 
 import java.util.List;
 
-import org.andengine.engine.handler.IUpdateHandler;
-
 import com.danilov.planes.game.controller.AIController;
+import com.danilov.planes.game.controller.command.AICommand;
+import com.danilov.planes.game.controller.command.Command;
+import com.danilov.planes.game.object.player.Player;
 
 public class AI {
+	
+	private float secondsElapsedSinceLastUpdate = 0;
 
 	private List<AIController> aiControllers;
+	
+	private List<Player> players;
+	
+	public AI(final List<AIController> aiControllers, final List<Player> players) {
+		this.aiControllers = aiControllers;
+		this.players = players;
+	}
 
 	public void onUpdate(final float secondsElapsed) {
 		if (aiControllers == null) {
 			return;
 		}
+		secondsElapsedSinceLastUpdate += secondsElapsed;
+		if (secondsElapsedSinceLastUpdate < 0.5f) {
+			return;
+		}
+		secondsElapsedSinceLastUpdate = 0;
+		Command command = new AICommand(secondsElapsedSinceLastUpdate, players);
 		for (AIController controller : aiControllers) {
-			
+			controller.sendCommand(command);
 		}
 	}
 	

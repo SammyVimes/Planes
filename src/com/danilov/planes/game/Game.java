@@ -1,5 +1,8 @@
 package com.danilov.planes.game;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
@@ -11,6 +14,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 
 import android.opengl.GLES20;
 
+import com.danilov.planes.game.controller.AIController;
 import com.danilov.planes.game.controller.Controller;
 import com.danilov.planes.game.controller.DevicePlayerController;
 import com.danilov.planes.game.controller.command.PlayerControlsCommand;
@@ -38,16 +42,30 @@ public class Game implements IUpdateHandler {
 	
 	//TODO: stard doing in proper way
 	Player p = null;
+	private List<Player> players = new LinkedList<Player>();
 	
 	public void init(final GameOptions gameOptions) {
 		gameWorld.init(gameOptions, scene);
+		
 		p = new Player(gameWorld, 25, 25);
 		DevicePlayerController controller = new DevicePlayerController(p);
 		p.setController(controller);
 		p.init();
 		p.setLooksToThe(Side.LEFT);
 		gameWorld.addObject(p);
-		ai = new AI();
+		
+		Player aiPlayer1 = new Player(gameWorld, 70, 120);
+		AIController aiController = new AIController(aiPlayer1);
+		aiPlayer1.setController(aiController);
+		aiPlayer1.init();
+		gameWorld.addObject(aiPlayer1);
+		List<AIController> controllersOfAi = new LinkedList<AIController>();
+		controllersOfAi.add(aiController);
+		players.add(aiPlayer1);
+		
+		camera.setChaseEntity(p.getEntity());
+		
+		ai = new AI(controllersOfAi, players);
 		engine.registerUpdateHandler(this);
 		createHUD();
 	}
@@ -56,7 +74,7 @@ public class Game implements IUpdateHandler {
 		Textures textures = Textures.getTextures();
 		ITextureRegion joystickBase = textures.getTextureRegion(StaticTexture.JOYSTICK_BASE.getName());
 		ITextureRegion joystickKnob = textures.getTextureRegion(StaticTexture.JOYSTICK_KNOB.getName());
-		AnalogOnScreenControl playerControl = new AnalogOnScreenControl(128, 250, camera, joystickBase, joystickKnob, 0.1f, textures.getVertexBufferObjectManager(), new IAnalogOnScreenControlListener() {
+		AnalogOnScreenControl playerControl = new AnalogOnScreenControl(80, 350, camera, joystickBase, joystickKnob, 0.1f, textures.getVertexBufferObjectManager(), new IAnalogOnScreenControlListener() {
 			
 			private Side side = null;
 			private Controller playerController = p.getController();

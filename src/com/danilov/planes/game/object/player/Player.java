@@ -45,7 +45,7 @@ public class Player extends GameObject {
 		this.y = y;
 	}
 	
-	public void setController(final DevicePlayerController controller) {
+	public void setController(final Controller controller) {
 		this.controller = controller;
 	}
 	
@@ -63,6 +63,11 @@ public class Player extends GameObject {
 			setflippedHorizontal(false);
 		}
 		setVelocity(velocity);
+	}
+	
+	//TODO: move this method to SUPER
+	public Entity getEntity() {
+		return plane;
 	}
 	
 	public void setRotationAngle(final double angle) {
