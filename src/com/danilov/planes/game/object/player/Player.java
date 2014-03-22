@@ -36,8 +36,7 @@ public class Player extends GameObject {
 	private boolean isRotating = false;
 	private boolean isRotatingToSomeAngle = false;
 	private Side rotatingToThe = null;
-	
-	
+
 	private Controller controller;
 	
 	public Player(final GameWorld gameWorld, final float x, final float y) {
@@ -116,7 +115,7 @@ public class Player extends GameObject {
 	private void performRotations(final float secondsElapsed) {
 		if (isRotating) {
 			if (isRotatingToSomeAngle) {
-				if ((int) rotatingToTheDegree == (int) rotationAngle) {
+				if (rotatingToTheDegree < rotationAngle + 10 && rotatingToTheDegree > rotationAngle - 10) {
 					stopRotatingToTheAngle();
 				}
 			}
@@ -137,7 +136,7 @@ public class Player extends GameObject {
 		if (looksToThe == Side.LEFT) {
 			rotatingToTheDegree = rotatingToTheDegree + 180;
 		}
-		if (rotatingToTheDegree > rotationAngle + 180) {
+		if (rotatingToTheDegree < rotationAngle) {
 			rotatingToThe = Side.LEFT;
 		} else {
 			rotatingToThe = Side.RIGHT;
@@ -201,6 +200,18 @@ public class Player extends GameObject {
 
 	public Controller getController() {
 		return controller;
+	}
+	
+	public float getX() {
+		return x;
+	}
+
+	public float getY() {
+		return y;
+	}
+
+	public boolean isRotatingToSomeAngle() {
+		return isRotatingToSomeAngle;
 	}
 	
 }

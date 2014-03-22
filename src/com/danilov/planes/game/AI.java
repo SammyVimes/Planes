@@ -28,8 +28,8 @@ public class AI {
 		if (secondsElapsedSinceLastUpdate < 0.5f) {
 			return;
 		}
-		secondsElapsedSinceLastUpdate = 0;
 		Command command = new AICommand(secondsElapsedSinceLastUpdate, players);
+		secondsElapsedSinceLastUpdate = 0;
 		for (AIController controller : aiControllers) {
 			controller.sendCommand(command);
 		}

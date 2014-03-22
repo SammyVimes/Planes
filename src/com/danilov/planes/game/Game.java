@@ -47,11 +47,10 @@ public class Game implements IUpdateHandler {
 	public void init(final GameOptions gameOptions) {
 		gameWorld.init(gameOptions, scene);
 		
-		p = new Player(gameWorld, 25, 25);
+		p = new Player(gameWorld, 25, 120);
 		DevicePlayerController controller = new DevicePlayerController(p);
 		p.setController(controller);
 		p.init();
-		p.setLooksToThe(Side.LEFT);
 		gameWorld.addObject(p);
 		
 		Player aiPlayer1 = new Player(gameWorld, 70, 120);
@@ -62,7 +61,7 @@ public class Game implements IUpdateHandler {
 		List<AIController> controllersOfAi = new LinkedList<AIController>();
 		controllersOfAi.add(aiController);
 		players.add(aiPlayer1);
-		
+		players.add(p);
 		camera.setChaseEntity(p.getEntity());
 		
 		ai = new AI(controllersOfAi, players);
