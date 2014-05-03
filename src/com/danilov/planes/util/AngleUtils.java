@@ -27,7 +27,6 @@ public final class AngleUtils {
 		final float a = x2 - x1; //horizontal cateth
 		final float b = (y2 - y1); //vertical cateth
 		//for tests
-		boolean targetBelow = b < 0;
 		boolean targetToTheLeft = a < 0;
 		
 		double tangens = (double) b/a;

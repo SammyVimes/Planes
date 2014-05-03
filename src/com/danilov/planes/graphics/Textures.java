@@ -24,7 +24,9 @@ public class Textures {
 	private Map<String, Texture> texturesMap;
 	private List<Texture> textures;
 	
+	@SuppressWarnings("unused")
 	private int atlasHeight;
+	@SuppressWarnings("unused")
 	private int atlasWidth;
 	
 	private boolean isLoaded = false;

@@ -12,6 +12,10 @@ public class AIController implements Controller {
 
 	private Player aiPlayer;
 	
+	//TODO: use
+	@SuppressWarnings("unused")
+	private Player currentTarget;
+	
 	public AIController(final Player player) {
 		this.aiPlayer = player;
 	}
@@ -40,7 +44,7 @@ public class AIController implements Controller {
 		lastRotationTime += aiCommand.getSecondsElapsed();
 		for (Player player : players) {
 			if (lastRotationTime > TIME_BETWEEN_ROTATIONS) {
-				rotate(player);
+				findEnemyAndRotate(player);
 			}
 		}
 		if (lastRotationTime > TIME_BETWEEN_ROTATIONS) {
@@ -48,11 +52,15 @@ public class AIController implements Controller {
 		}
 	}
 	
-	private void rotate(final Player player) {
+	//TODO: find the best target and fight it
+	private void findEnemyAndRotate(final Player player) {
 		if (aiPlayer.isRotatingToSomeAngle()) {
 			return;
 		}
 		if (player != aiPlayer) {
+			if (!aiPlayer.isEnemyOf(player)) {
+				return; //do nothing if teammate
+			}
 			float x1 = aiPlayer.getX(), y1 = aiPlayer.getY(),
 				  x2 = player.getX(), y2 = player.getY();
 			double angle = AngleUtils.calculateAngleBetweenPoints(x1, y1, x2, y2);

@@ -50,7 +50,7 @@ public class GameActivity extends BaseGameActivity {
 		textures.setVertexBufferObject(this.getVertexBufferObjectManager());
 		scene = new Scene();
 		scene.setBackground(new Background(Color.BLUE));
-		game = new Game(this.mEngine, camera, scene);
+		game = new Game(this.mEngine, camera, scene, this.getBaseContext());
 		game.init(null);
 		mEngine.setScene(scene);
 		pOnCreateSceneCallback.onCreateSceneFinished(scene);

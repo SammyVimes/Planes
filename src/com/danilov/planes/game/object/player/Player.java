@@ -29,9 +29,10 @@ public class Player extends GameObject {
 	private float y;
 	private double rotationAngle = 0; //degrees
 	private double rotatingToTheDegree = 0; //degrees
-	private double velocity = 95;
+	private double velocity = 195;
 	private double velocityY = 0;
 	private double velocityX = 0;
+	private int team = 0;
 	
 	private boolean isRotating = false;
 	private boolean isRotatingToSomeAngle = false;
@@ -132,10 +133,10 @@ public class Player extends GameObject {
 	
 	//according to the nose of aircraft (its not a simple rotation of sprite)
 	public void startRotatingToTheAngle(final double angle) {
-		this.rotatingToTheDegree = angle;
 		if (looksToThe == Side.LEFT) {
-			rotatingToTheDegree = rotatingToTheDegree + 180;
+			rotatingToTheDegree = angle + 180;
 		}
+		this.rotatingToTheDegree = AngleUtils.normalizeAngle(rotatingToTheDegree);
 		if (rotatingToTheDegree < rotationAngle) {
 			rotatingToThe = Side.LEFT;
 		} else {
@@ -210,8 +211,20 @@ public class Player extends GameObject {
 		return y;
 	}
 
+	public int getTeam() {
+		return team;
+	}
+
+	public void setTeam(final int team) {
+		this.team = team;
+	}
+
 	public boolean isRotatingToSomeAngle() {
 		return isRotatingToSomeAngle;
+	}
+	
+	public boolean isEnemyOf(final Player player) {
+		return team != player.getTeam();
 	}
 	
 }

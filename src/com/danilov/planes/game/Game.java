@@ -10,9 +10,18 @@ import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl.IAnalogOnS
 import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.scene.Scene;
+import org.andengine.extension.tmx.TMXLayer;
+import org.andengine.extension.tmx.TMXLoader;
+import org.andengine.extension.tmx.TMXObject;
+import org.andengine.extension.tmx.TMXTiledMap;
+import org.andengine.extension.tmx.util.exception.TMXLoadException;
+import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
+import android.content.Context;
+import android.content.res.AssetManager;
 import android.opengl.GLES20;
+import android.util.Log;
 
 import com.danilov.planes.game.controller.AIController;
 import com.danilov.planes.game.controller.Controller;
@@ -26,42 +35,75 @@ import com.danilov.planes.graphics.Textures;
 
 public class Game implements IUpdateHandler {
 
+	private Context context = null;
+	
 	protected Camera camera;
 	private Engine engine;
 	private Scene scene;
 	
+	private TMXTiledMap tmxMap =  null;
+	
 	private GameWorld gameWorld;
 	private AI ai;
 	
-	public Game(final Engine engine, final Camera camera, final Scene scene) {
+	public Game(final Engine engine, final Camera camera, final Scene scene, final Context context) {
 		this.engine = engine;
 		this.camera = camera;
 		this.scene = scene;
+		this.context = context;
 		gameWorld = new GameWorld(this);
 	}
 	
-	//TODO: stard doing in proper way
+	//TODO: start doing in proper way
 	Player p = null;
 	private List<Player> players = new LinkedList<Player>();
 	
 	public void init(final GameOptions gameOptions) {
+		
+		//TODO: rewrite
+		loadMap();
+		final TMXLayer mTMXLayer = tmxMap.getTMXLayers().get(0);
+		scene.attachChild(mTMXLayer);
+		
+		TMXObject obj = tmxMap.getTMXObjectGroups().get(0).getTMXObjects().get(0);
+		int x = obj.getX();
+		int y = obj.getY();
+		
 		gameWorld.init(gameOptions, scene);
 		
-		p = new Player(gameWorld, 25, 120);
+		p = new Player(gameWorld, x, y);
 		DevicePlayerController controller = new DevicePlayerController(p);
 		p.setController(controller);
 		p.init();
 		gameWorld.addObject(p);
+		p.setTeam(0);
 		
-		Player aiPlayer1 = new Player(gameWorld, 70, 120);
+		Player aiPlayer1 = new Player(gameWorld, x + 70, y - 120);
 		AIController aiController = new AIController(aiPlayer1);
 		aiPlayer1.setController(aiController);
 		aiPlayer1.init();
+		aiPlayer1.setLooksToThe(Side.LEFT);
+		
+
+		
+		Player aiPlayer2 = new Player(gameWorld, x + 270, y);
+		AIController aiController2 = new AIController(aiPlayer2);
+		aiPlayer2.setController(aiController2);
+		aiPlayer2.init();
+		aiPlayer2.setLooksToThe(Side.RIGHT);
+		
+		aiPlayer1.setTeam(1);
+		aiPlayer2.setTeam(1);
+		
 		gameWorld.addObject(aiPlayer1);
+		gameWorld.addObject(aiPlayer2);
 		List<AIController> controllersOfAi = new LinkedList<AIController>();
 		controllersOfAi.add(aiController);
+		controllersOfAi.add(aiController2);
 		players.add(aiPlayer1);
+		players.add(aiPlayer2);
 		players.add(p);
+		
 		camera.setChaseEntity(p.getEntity());
 		
 		ai = new AI(controllersOfAi, players);
@@ -100,6 +142,8 @@ public class Game implements IUpdateHandler {
 					case RIGHT:
 						command = new PlayerControlsCommand(PlayerControlsCommand.Control.RIGHT_PRESSED);
 						break;
+					default:
+						break;
 					}
 				}
 				if (command != null) {
@@ -116,6 +160,16 @@ public class Game implements IUpdateHandler {
 		playerControl.getControlBase().setBlendFunction(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 		playerControl.getControlBase().setAlpha(0.5f);
 		scene.setChildScene(playerControl);
+	}
+	
+	private void loadMap() {
+		AssetManager assetManager = context.getAssets();
+		TMXLoader loader = new TMXLoader(assetManager, engine.getTextureManager(), TextureOptions.BILINEAR_PREMULTIPLYALPHA, null);
+		try {
+			tmxMap = loader.loadFromAsset("tmx/map.tmx");
+		} catch (TMXLoadException e) {
+			Log.e("Planes.MapLoader", e.getMessage());
+		}
 	}
 
 	@Override
