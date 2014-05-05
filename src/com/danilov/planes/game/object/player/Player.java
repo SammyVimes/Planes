@@ -133,8 +133,9 @@ public class Player extends GameObject {
 	
 	//according to the nose of aircraft (its not a simple rotation of sprite)
 	public void startRotatingToTheAngle(final double angle) {
+		this.rotatingToTheDegree = angle;
 		if (looksToThe == Side.LEFT) {
-			rotatingToTheDegree = angle + 180;
+			rotatingToTheDegree += 180;
 		}
 		this.rotatingToTheDegree = AngleUtils.normalizeAngle(rotatingToTheDegree);
 		if (rotatingToTheDegree < rotationAngle) {
