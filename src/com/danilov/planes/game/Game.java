@@ -31,11 +31,11 @@ import com.danilov.planes.game.controller.Controller;
 import com.danilov.planes.game.controller.DevicePlayerController;
 import com.danilov.planes.game.controller.command.PlayerControlsCommand;
 import com.danilov.planes.game.controller.command.PlayerControlsCommand.Control;
-import com.danilov.planes.game.object.Side;
 import com.danilov.planes.game.object.player.Player;
 import com.danilov.planes.game.options.GameOptions;
 import com.danilov.planes.graphics.StaticTexture;
 import com.danilov.planes.graphics.Textures;
+import com.danilov.planes.util.Side;
 
 public class Game implements IUpdateHandler {
 

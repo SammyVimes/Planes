@@ -8,13 +8,12 @@ import org.andengine.entity.sprite.Sprite;
 import com.danilov.planes.game.GameWorld;
 import com.danilov.planes.game.controller.Controller;
 import com.danilov.planes.game.object.GameObject;
-import com.danilov.planes.game.object.Side;
 import com.danilov.planes.graphics.StaticTexture;
 import com.danilov.planes.graphics.Textures;
 import com.danilov.planes.util.AngleUtils;
+import com.danilov.planes.util.Side;
 
 public class Player extends GameObject {
-
 	
 	private static final double DEF_ROT_ANGLE = 120;
 	

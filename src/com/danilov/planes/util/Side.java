@@ -1,4 +1,4 @@
-package com.danilov.planes.game.object;
+package com.danilov.planes.util;
 
 public enum Side {
 
