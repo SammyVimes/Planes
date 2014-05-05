@@ -10,11 +10,13 @@ import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl.IAnalogOnS
 import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.tmx.TMXLayer;
 import org.andengine.extension.tmx.TMXLoader;
 import org.andengine.extension.tmx.TMXObject;
 import org.andengine.extension.tmx.TMXTiledMap;
 import org.andengine.extension.tmx.util.exception.TMXLoadException;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
@@ -22,11 +24,13 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES20;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import com.danilov.planes.game.controller.AIController;
 import com.danilov.planes.game.controller.Controller;
 import com.danilov.planes.game.controller.DevicePlayerController;
 import com.danilov.planes.game.controller.command.PlayerControlsCommand;
+import com.danilov.planes.game.controller.command.PlayerControlsCommand.Control;
 import com.danilov.planes.game.object.Side;
 import com.danilov.planes.game.object.player.Player;
 import com.danilov.planes.game.options.GameOptions;
@@ -46,6 +50,8 @@ public class Game implements IUpdateHandler {
 	private GameWorld gameWorld;
 	private AI ai;
 	
+	private Player mainPlayer = null;
+	
 	public Game(final Engine engine, final Camera camera, final Scene scene, final Context context) {
 		this.engine = engine;
 		this.camera = camera;
@@ -55,7 +61,6 @@ public class Game implements IUpdateHandler {
 	}
 	
 	//TODO: start doing in proper way
-	Player p = null;
 	private List<Player> players = new LinkedList<Player>();
 	
 	public void init(final GameOptions gameOptions) {
@@ -71,12 +76,12 @@ public class Game implements IUpdateHandler {
 		
 		gameWorld.init(gameOptions, scene);
 		
-		p = new Player(gameWorld, x, y);
-		DevicePlayerController controller = new DevicePlayerController(p);
-		p.setController(controller);
-		p.init();
-		gameWorld.addObject(p);
-		p.setTeam(0);
+		mainPlayer = new Player(gameWorld, x, y);
+		DevicePlayerController controller = new DevicePlayerController(mainPlayer);
+		mainPlayer.setController(controller);
+		mainPlayer.init();
+		gameWorld.addObject(mainPlayer);
+		mainPlayer.setTeam(0);
 		
 		Player aiPlayer1 = new Player(gameWorld, x + 70, y - 120);
 		AIController aiController = new AIController(aiPlayer1);
@@ -102,9 +107,9 @@ public class Game implements IUpdateHandler {
 		controllersOfAi.add(aiController2);
 		players.add(aiPlayer1);
 		players.add(aiPlayer2);
-		players.add(p);
+		players.add(mainPlayer);
 		
-		camera.setChaseEntity(p.getEntity());
+		camera.setChaseEntity(mainPlayer.getEntity());
 		
 		ai = new AI(controllersOfAi, players);
 		engine.registerUpdateHandler(this);
@@ -118,7 +123,7 @@ public class Game implements IUpdateHandler {
 		AnalogOnScreenControl playerControl = new AnalogOnScreenControl(80, 350, camera, joystickBase, joystickKnob, 0.1f, textures.getVertexBufferObjectManager(), new IAnalogOnScreenControlListener() {
 			
 			private Side side = null;
-			private Controller playerController = p.getController();
+			private Controller playerController = mainPlayer.getController();
 			
 			@Override
 			public void onControlChange(BaseOnScreenControl pBaseOnScreenControl,
@@ -131,7 +136,7 @@ public class Game implements IUpdateHandler {
 					tmpSide = Side.RIGHT;
 				} else {
 					side = null;	
-					command = new PlayerControlsCommand(PlayerControlsCommand.Control.LEFT_RIGHT_UP);
+					command = new PlayerControlsCommand(PlayerControlsCommand.Control.LR_CONTROL_UP);
 				}
 				if (tmpSide != side && tmpSide != null) {
 					side = tmpSide;
@@ -156,10 +161,35 @@ public class Game implements IUpdateHandler {
 				// TODO Auto-generated method stub
 				
 			}
+			
 		});
 		playerControl.getControlBase().setBlendFunction(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 		playerControl.getControlBase().setAlpha(0.5f);
 		scene.setChildScene(playerControl);
+		
+		Sprite fireBtn = new Sprite(750, 350, textures.getTextureRegion(StaticTexture.JOYSTICK_KNOB.getName()), textures.getVertexBufferObjectManager()) {
+			
+			private Controller playerController = mainPlayer.getController();
+			
+			@Override
+			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+				PlayerControlsCommand command = null;
+				if (pSceneTouchEvent.getAction() == MotionEvent.ACTION_UP) {
+					command = new PlayerControlsCommand(Control.FIRE_UP);
+					Log.d("Planes", "FIRE_UP");
+				} else if (pSceneTouchEvent.getAction() == MotionEvent.ACTION_DOWN) {
+					command = new PlayerControlsCommand(Control.FIRE_PRESSED);
+					Log.d("Planes", "FIRE_PRESSED");
+				}
+				if (command != null) {
+					playerController.sendCommand(command);
+				}
+				return true;
+			}
+		};
+		fireBtn.setScale(2);
+		playerControl.attachChild(fireBtn);
+		playerControl.registerTouchArea(fireBtn);
 	}
 	
 	private void loadMap() {

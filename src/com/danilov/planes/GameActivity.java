@@ -21,8 +21,8 @@ public class GameActivity extends BaseGameActivity {
 	private Scene scene;
 	private Camera camera;
 	
-	private static final int CAMERA_WIDTH = 720;
-	private static final int CAMERA_HEIGHT = 480;
+	private static final int CAMERA_WIDTH = 960;
+	private static final int CAMERA_HEIGHT = 540;
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {

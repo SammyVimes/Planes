@@ -6,7 +6,7 @@ public class PlayerControlsCommand extends Command {
 		
 		LEFT_PRESSED,
 		RIGHT_PRESSED,
-		LEFT_RIGHT_UP, //TODO: rename to control up
+		LR_CONTROL_UP, //TODO: rename to control up
 		FIRE_PRESSED,
 		FIRE_UP
 		

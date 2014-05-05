@@ -35,7 +35,7 @@ public class DevicePlayerController implements Controller {
 		case RIGHT_PRESSED:
 			player.startRotatingRight();
 			break;
-		case LEFT_RIGHT_UP:
+		case LR_CONTROL_UP:
 			player.stopRotating();
 			break;
 		

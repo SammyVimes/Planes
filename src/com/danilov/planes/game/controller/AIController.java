@@ -37,18 +37,16 @@ public class AIController implements Controller {
 	Random rand = new Random();
 	
 	private static final float TIME_BETWEEN_ROTATIONS = 0.5f;
-	private float lastRotationTime = 0;
+	private float timeFromLastRotation = 0;
 	
 	private void onUpdateAICommand(final AICommand aiCommand) {
 		List<Player> players = aiCommand.getPlayers();
-		lastRotationTime += aiCommand.getSecondsElapsed();
-		for (Player player : players) {
-			if (lastRotationTime > TIME_BETWEEN_ROTATIONS) {
+		timeFromLastRotation += aiCommand.getSecondsElapsed();
+		if (timeFromLastRotation > TIME_BETWEEN_ROTATIONS) {
+			for (Player player : players) {
 				findEnemyAndRotate(player);
 			}
-		}
-		if (lastRotationTime > TIME_BETWEEN_ROTATIONS) {
-			lastRotationTime = 0;
+			timeFromLastRotation = 0;
 		}
 	}
 	
