@@ -3,6 +3,7 @@ package com.danilov.planes.game.object.player;
 import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.entity.Entity;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.Sprite;
 
 import com.danilov.planes.game.GameWorld;
@@ -17,7 +18,7 @@ public class Player extends GameObject {
 	
 	private static final double DEF_ROT_ANGLE = 120;
 	
-	private Entity plane;
+	private Shape plane;
 	private Scene scene;
 	private boolean isAttached = false;
 	private PhysicsHandler physicsHandler;

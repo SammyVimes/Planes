@@ -16,6 +16,10 @@ public class GameObject implements IUpdateHandler {
 		return gameWorld;
 	}
 	
+	public void removeSelf() {
+		this.gameWorld.removeObject(this);
+	}
+	
 	@Override
 	public void onUpdate(final float secondsElapsed) {
 		// TODO Auto-generated method stub

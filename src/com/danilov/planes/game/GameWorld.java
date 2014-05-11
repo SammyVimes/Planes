@@ -29,6 +29,10 @@ public class GameWorld {
 		this.gameObjects.add(gameObject);
 	}
 	
+	public void removeObject(final GameObject gameObject) {
+		this.gameObjects.remove(gameObject);
+	}
+	
 	public Scene getScene() {
 		return scene;
 	}
