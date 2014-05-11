@@ -9,6 +9,7 @@ import org.andengine.entity.sprite.Sprite;
 import com.danilov.planes.game.GameWorld;
 import com.danilov.planes.game.controller.Controller;
 import com.danilov.planes.game.object.GameObject;
+import com.danilov.planes.game.object.weapon.Bullet;
 import com.danilov.planes.graphics.StaticTexture;
 import com.danilov.planes.graphics.Textures;
 import com.danilov.planes.util.AngleUtils;
@@ -16,6 +17,7 @@ import com.danilov.planes.util.Side;
 
 public class Player extends GameObject {
 	
+	//in a second player will rotate for this angle
 	private static final double DEF_ROT_ANGLE = 120;
 	
 	private Shape plane;
@@ -74,8 +76,9 @@ public class Player extends GameObject {
 	
 	private void setRotationAngle(final double angle) {
 		rotationAngle = AngleUtils.normalizeAngle(angle);
+		//recalculating velocity
 		setVelocity(velocity);
-		((Sprite) plane).setRotation((float) angle);
+		plane.setRotation((float) angle);
 	}
 	
 	private void addRotationAngle(final double angle) {
@@ -193,6 +196,12 @@ public class Player extends GameObject {
 		attachToScene();
 	}
 	
+	public void fireCannon() {
+		Bullet bullet = new Bullet(this, x, y, getNoseAngle(), gameWorld);
+		bullet.init();
+		this.gameWorld.addObject(bullet);
+	}
+	
 	private void setflippedHorizontal(final boolean isFlipped) {
 		if (plane == null) {
 			return;
@@ -214,6 +223,10 @@ public class Player extends GameObject {
 
 	public int getTeam() {
 		return team;
+	}
+	
+	public double getNoseAngle() {
+		return AngleUtils.normalizeAngle((looksToThe == Side.RIGHT) ? rotationAngle : rotationAngle + 180); 
 	}
 
 	public void setTeam(final int team) {

@@ -46,6 +46,7 @@ public class AIController implements Controller {
 			for (Player player : players) {
 				findEnemyAndRotate(player);
 			}
+			aiPlayer.fireCannon();
 			timeFromLastRotation = 0;
 		}
 	}

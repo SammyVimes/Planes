@@ -13,7 +13,8 @@ import com.danilov.planes.util.AngleUtils;
 public class Bullet extends GameObject {
 	
 	private static float TIME_TO_LIVE = 1.5f; //1.5 sec
-	private static long WIDTH_HEIGHT = 20;
+	private static long WIDTH_HEIGHT = 10;
+	private static double DEFAULT_VELOCITY = 650;
 	
 	private Player shooter = null;
 	
@@ -52,7 +53,8 @@ public class Bullet extends GameObject {
 		physicsHandler = new PhysicsHandler(bulletShape);
 		bulletShape.registerUpdateHandler(physicsHandler);
 		gameWorld.getScene().attachChild(bulletShape);
-		
+		this.velocity = DEFAULT_VELOCITY;
+		bulletShape.setRotation(45.0f);
 		setVelocity(velocity);
 	}
 	

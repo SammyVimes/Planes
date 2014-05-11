@@ -26,6 +26,7 @@ public class DevicePlayerController implements Controller {
 	private void onPlayerControlsCommand(final PlayerControlsCommand command) {
 		switch (command.getControl()) {
 		case FIRE_PRESSED:
+			player.fireCannon();
 			break;
 		case FIRE_UP:
 			break;
